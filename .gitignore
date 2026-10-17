@@ -1,0 +1,10 @@
+loopcc
+*.o
+parser.tab.c
+parser.tab.h
+lex.yy.c
+*.exe
+*.stackdump
+.vscode/
+.idea/
+.DS_Store
