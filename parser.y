@@ -26,7 +26,7 @@ statement: block { $$=$1; } | declaration { $$=$1; } | expression_statement { $$
 declaration: INT IDENT ';' { $$=ast_decl($2,NULL,@1.first_line); } | INT IDENT '=' expression ';' { $$=ast_decl($2,$4,@1.first_line); };
 expression_statement: ';' { $$=ast_expr_stmt(NULL,@1.first_line); } | assignment_expr ';' { $$=ast_expr_stmt($1,@1.first_line); };
 for_statement: FOR '(' for_init for_condition for_update ')' statement { $$=ast_for($3,$4?$4->data.expr_stmt.expr:NULL,$5,$7,@1.first_line); };
-for_init: ';' { $$=NULL; } | declaration { $$=$1; } | assignment_expr ';' { $$=ast_expr_stmt($1,@1.first_line); };
+for_init: ';' { $$=NULL; } | declaration { $$=$1; } | assignment_expr ';' { $$=$1; };
 for_condition: ';' { $$=ast_expr_stmt(NULL,@1.first_line); } | assignment_expr ';' { $$=ast_expr_stmt($1,@1.first_line); };
 for_update: %empty { $$=NULL; } | assignment_expr { $$=$1; };
 while_statement: WHILE '(' expression ')' statement { $$=ast_while($3,$5,@1.first_line); };

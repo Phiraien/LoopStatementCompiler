@@ -90,6 +90,38 @@ Generated parser/lexer C files, object files, executables, editor settings, and 
 
 The supported subset intentionally excludes functions, arrays, pointers, floating-point values, types other than `int`, comma operators, `break`, `continue`, `if`, code generation, optimization, and runtime evaluation. See `docs/cfg_and_grammar.md` for the grammar and `docs/architecture.md` for the pipeline.
 
+## AST tree output
+
+Use `-t` to print a branching tree with readable node names:
+
+```sh
+./loopcc -t tests/valid_for.c
+```
+
+Example shape:
+
+```text
+Program
+└── Block
+    ├── Declaration: i
+    │   └── Integer: 0
+    └── For Loop
+        ├── Initialization
+        │   └── Assignment: i
+        │       └── Integer: 0
+        ├── Condition
+        │   └── Binary Expression: <
+        │       ├── Identifier: i
+        │       └── Integer: 3
+        ├── Update
+        │   └── Assignment: i
+        │       └── Binary Expression: +
+        └── Body
+            └── Block
+```
+
+The printer includes `for`, `while`, and `do-while` loop labels, condition/initialization/update/body branches, nested blocks, binary and unary expressions, identifiers, and integer literals.
+
 ## Six-member work division
 
 1. Member 1 — `lexer.l`: lexical analysis.
