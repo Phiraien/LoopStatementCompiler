@@ -77,11 +77,9 @@ ast.h, ast.c            AST definitions, construction, printing, cleanup
 semantic.h, semantic.c  Symbol table, scopes, semantic diagnostics
 main.c                  CLI, parser/semantic integration
 Makefile                Generation, compilation, check, test, clean targets
-docs/                   Architecture, CFG, interfaces, report, viva material
 tests/                  Valid/invalid source programs and test runner
 .github/                Pull-request and issue templates
 screenshots/            Instructions for adding verified screenshots
-presentation/           Slide-by-slide presentation outline
 ```
 
 Generated parser/lexer C files, object files, executables, editor settings, and crash dumps are ignored by Git.
