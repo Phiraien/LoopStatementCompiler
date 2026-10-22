@@ -68,6 +68,14 @@ sh tests/run_tests.sh
 
 The suite covers the three requested valid loop examples, syntax failure, semantic failure, and additional nested/scope cases. A successful run reports `Summary: 9 passed, 0 failed.` The repository must be tested in an environment with the required toolchain; otherwise the script reports the missing tools and exits with status 2 rather than inventing results.
 
+Run the headless GUI/compiler bridge checks with:
+
+```sh
+make gui-test
+```
+
+These tests validate JSON AST output, invalid syntax handling, and empty-source behavior without requiring a display.
+
 ## Project structure
 
 ```text
@@ -121,6 +129,27 @@ Program
 ```
 
 The printer includes `for`, `while`, and `do-while` loop labels, condition/initialization/update/body branches, nested blocks, binary and unary expressions, identifiers, and integer literals.
+
+The compiler also exposes a structured AST mode for tools such as the desktop GUI:
+
+```sh
+./loopcc -j tests/valid_for.c
+```
+
+`-j` emits JSON only after successful parsing and semantic analysis. Diagnostics remain on stderr. The text mode remains available through `-t`.
+
+## Desktop GUI
+
+The repository includes a dependency-free Tkinter dark IDE GUI. It edits and saves source files, invokes the existing C compiler, displays real diagnostics, runs the test suite, and renders the actual AST JSON in an expandable Treeview. It does not reimplement the compiler in Python.
+
+Build the C compiler and launch the GUI:
+
+```sh
+make
+python -m gui.app
+```
+
+On Windows, double-click `launch_gui.bat`. See [`gui/README.md`](gui/README.md) for MSYS2, Tkinter, structured AST, and troubleshooting instructions.
 
 ## Six-member work division
 

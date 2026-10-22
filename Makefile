@@ -32,7 +32,10 @@ check: all
 test:
 	sh tests/run_tests.sh
 
+gui-test: all
+	python -m unittest gui.tests.test_integration -v
+
 clean:
 	rm -f $(TARGET) $(OBJS) $(GENERATED)
 
-.PHONY: all check test clean
+.PHONY: all check test gui-test clean
