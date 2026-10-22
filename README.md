@@ -36,8 +36,7 @@ Loop_Statement_Compiler/
 │   └── invalid.txt
 ├── tests/
 │   └── test_python_compiler.py
-└── screenshots/
-    └── README.md
+└── ── README.md
 ```
 
 ## Requirements
