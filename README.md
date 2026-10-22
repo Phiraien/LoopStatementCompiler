@@ -17,6 +17,42 @@ This repository recognizes and validates a documented, integer-only subset of C 
 
 This is a front end for demonstration and viva purposes. It does **not** generate machine code or claim to implement complete ISO C.
 
+## Python reference implementation
+
+This repository also contains a beginner-friendly pure-Python implementation of the same educational loop language. It is useful when Flex/Bison are unavailable and is the implementation used by the sample `gui.py` desktop interface.
+
+```text
+main.py                 Python compilation pipeline
+lexer.py                Regular-expression lexer
+parser.py               Recursive-descent parser
+ast_nodes.py            Dataclass AST nodes
+semantic.py             Scope and declaration checks
+gui.py                  Tkinter GUI for the Python compiler
+examples/               Valid and invalid sample programs
+requirements.txt        Standard-library dependency note
+```
+
+Run the Python compiler interactively:
+
+```sh
+python main.py
+# type a program, then type END on its own line
+```
+
+Run the Python test suite:
+
+```sh
+python -m unittest discover -s tests -p "test_python_compiler.py" -v
+```
+
+Launch the Python GUI:
+
+```sh
+python gui.py
+```
+
+The original C/Flex/Bison compiler and the newer dark IDE GUI remain available. The Python implementation is intentionally a small educational subset; it is not a replacement for complete C.
+
 ## Requirements
 
 - GCC or another C11 compiler

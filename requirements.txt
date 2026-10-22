@@ -1,0 +1,2 @@
+# The Python reference compiler and GUI use only the Python standard library.
+# Python 3.9+ is recommended. Tkinter is included with the standard Windows installer.
