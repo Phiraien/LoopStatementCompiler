@@ -261,6 +261,134 @@ void ast_print(const AstNode *node, FILE *out, int indent) {
     if (node) print_node(node, "", 1, out);
 }
 
+static void json_string(FILE *out, const char *text) {
+    const unsigned char *p = (const unsigned char *)(text ? text : "");
+    fputc('"', out);
+    while (*p) {
+        switch (*p) {
+            case '\\': fputs("\\\\", out); break;
+            case '"': fputs("\\\"", out); break;
+            case '\n': fputs("\\n", out); break;
+            case '\r': fputs("\\r", out); break;
+            case '\t': fputs("\\t", out); break;
+            default:
+                if (*p < 0x20) fprintf(out, "\\u%04x", *p);
+                else fputc(*p, out);
+        }
+        p++;
+    }
+    fputc('"', out);
+}
+
+static void json_node(const AstNode *node, FILE *out);
+
+static void json_children_start(FILE *out) { fputs(",\"children\":[", out); }
+static void json_children_end(FILE *out) { fputc(']', out); }
+
+static void json_child(const AstNode *node, FILE *out, int *first) {
+    if (!*first) fputc(',', out);
+    json_node(node, out);
+    *first = 0;
+}
+
+static void json_list(const AstNode *node, FILE *out) {
+    int first = 1;
+    while (node) {
+        json_child(node, out, &first);
+        node = node->next;
+    }
+}
+
+static void json_wrapper(const char *type, const AstNode *child, FILE *out) {
+    fprintf(out, "{\"type\":");
+    json_string(out, type);
+    fputs(",\"line\":0,\"children\":[", out);
+    if (child) json_node(child, out);
+    fputs("]}", out);
+}
+
+static void json_node(const AstNode *node, FILE *out) {
+    if (!node) {
+        fputs("null", out);
+        return;
+    }
+
+    fputs("{\"type\":", out);
+    switch (node->kind) {
+        case AST_BLOCK:
+            json_string(out, "block");
+            fprintf(out, ",\"line\":%d", node->line);
+            json_children_start(out); json_list(node->data.block.items, out); json_children_end(out);
+            break;
+        case AST_DECL:
+            json_string(out, "declaration");
+            fprintf(out, ",\"line\":%d,\"name\":", node->line);
+            json_string(out, node->data.decl.name);
+            json_children_start(out); if (node->data.decl.initializer) json_node(node->data.decl.initializer, out); json_children_end(out);
+            break;
+        case AST_ASSIGN:
+            json_string(out, "assignment");
+            fprintf(out, ",\"line\":%d,\"name\":", node->line);
+            json_string(out, node->data.assign.name);
+            json_children_start(out); json_node(node->data.assign.value, out); json_children_end(out);
+            break;
+        case AST_EXPR_STMT:
+            json_string(out, "expression_statement");
+            fprintf(out, ",\"line\":%d", node->line);
+            json_children_start(out); if (node->data.expr_stmt.expr) json_node(node->data.expr_stmt.expr, out); json_children_end(out);
+            break;
+        case AST_FOR:
+            json_string(out, "for");
+            fprintf(out, ",\"line\":%d,\"children\":[", node->line);
+            json_wrapper("initialization", node->data.for_loop.init, out);
+            fputc(',', out); json_wrapper("condition", node->data.for_loop.condition, out);
+            fputc(',', out); json_wrapper("update", node->data.for_loop.update, out);
+            fputc(',', out); json_wrapper("body", node->data.for_loop.body, out);
+            fputc(']', out);
+            break;
+        case AST_WHILE:
+            json_string(out, "while");
+            fprintf(out, ",\"line\":%d,\"children\":[", node->line);
+            json_wrapper("condition", node->data.loop.condition, out);
+            fputc(',', out); json_wrapper("body", node->data.loop.body, out); fputc(']', out);
+            break;
+        case AST_DO_WHILE:
+            json_string(out, "do_while");
+            fprintf(out, ",\"line\":%d,\"children\":[", node->line);
+            json_wrapper("body", node->data.loop.body, out);
+            fputc(',', out); json_wrapper("condition", node->data.loop.condition, out); fputc(']', out);
+            break;
+        case AST_INT:
+            json_string(out, "integer");
+            fprintf(out, ",\"line\":%d,\"value\":%d", node->line, node->data.integer.value);
+            break;
+        case AST_IDENT:
+            json_string(out, "identifier");
+            fprintf(out, ",\"line\":%d,\"name\":", node->line);
+            json_string(out, node->data.ident.name);
+            break;
+        case AST_BINARY:
+            json_string(out, "binary");
+            fprintf(out, ",\"line\":%d,\"operator\":", node->line);
+            json_string(out, op_name(node->data.binary.op));
+            json_children_start(out); json_node(node->data.binary.left, out); fputc(',', out); json_node(node->data.binary.right, out); json_children_end(out);
+            break;
+        case AST_UNARY:
+            json_string(out, "unary");
+            fprintf(out, ",\"line\":%d,\"operator\":", node->line);
+            json_string(out, op_name(node->data.unary.op));
+            json_children_start(out); json_node(node->data.unary.operand, out); json_children_end(out);
+            break;
+    }
+    fputc('}', out);
+}
+
+void ast_json_print(const AstNode *node, FILE *out) {
+    fputs("{\"type\":\"program\",\"line\":0,\"children\":[", out);
+    if (node) json_node(node, out);
+    fputs("]}\n", out);
+}
+
 void ast_free(AstNode *node) {
     while (node) {
         AstNode *next = node->next;

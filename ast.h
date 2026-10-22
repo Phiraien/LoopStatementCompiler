@@ -45,6 +45,7 @@ AstNode *ast_binary(AstOp op, AstNode *left, AstNode *right, int line);
 AstNode *ast_unary(AstOp op, AstNode *operand, int line);
 AstNode *ast_append(AstNode *list, AstNode *node);
 void ast_print(const AstNode *node, FILE *out, int indent);
+void ast_json_print(const AstNode *node, FILE *out);
 void ast_free(AstNode *node);
 
 #endif
