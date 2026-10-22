@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Loop Statement Compiler</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Inter,Segoe UI,system-ui,sans-serif; color:var(--text); background:radial-gradient(circle at top right,#172b4d 0,#0d1117 42%); line-height:1.6; }
+    main { max-width:1080px; margin:auto; padding:72px 24px; }
+    .eyebrow { color:var(--green); font:600 13px ui-monospace,SFMono-Regular,Consolas,monospace; letter-spacing:.12em; text-transform:uppercase; }
+    h1 { max-width:780px; margin:14px 0; font-size:clamp(38px,7vw,76px); line-height:1.02; letter-spacing:-.05em; }
+    h2 { margin-top:0; font-size:24px; }
+    .lead { max-width:720px; color:var(--muted); font-size:19px; }
+    .actions { display:flex; flex-wrap:wrap; gap:12px; margin:30px 0 58px; }
+    a.button { padding:11px 17px; border:1px solid var(--line); border-radius:8px; color:var(--text); text-decoration:none; background:var(--panel); }
+    a.button.primary { border-color:var(--accent); background:#1f6feb; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px; }
+    .card { padding:22px; border:1px solid var(--line); border-radius:12px; background:rgba(22,27,34,.84); }
+    .card p, li { color:var(--muted); }
+    code, pre { font-family:ui-monospace,SFMono-Regular,Consolas,monospace; }
+    pre { overflow:auto; padding:18px; border:1px solid var(--line); border-radius:10px; background:#010409; color:#c9d1d9; }
+    .tree { color:#9cdcfe; }
+    footer { margin-top:56px; color:var(--muted); font-size:14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Compiler Design mini project</div>
+    <h1>Loop Statement Compiler</h1>
+    <p class="lead">A beginner-friendly C, Flex, and Bison compiler front end for validating <code>for</code>, <code>while</code>, and <code>do-while</code> loops with AST generation and semantic analysis.</p>
+    <div class="actions">
+      <a class="button primary" href="https://github.com/Phiraien/LoopStatementCompiler">View source on GitHub</a>
+      <a class="button" href="https://github.com/Phiraien/LoopStatementCompiler/blob/main/gui/README.md">Run the desktop GUI</a>
+    </div>
+
+    <section class="grid">
+      <article class="card"><h2>Compiler front end</h2><p>Flex lexer, Bison grammar, AST construction, scoped symbol checks, and honest syntax/semantic diagnostics.</p></article>
+      <article class="card"><h2>Dark IDE GUI</h2><p>Tkinter editor with samples, line numbers, compilation output, test results, and an expandable AST explorer.</p></article>
+      <article class="card"><h2>Viva-ready</h2><p>Documented subset, grammar notes, architecture, interfaces, test programs, and setup instructions for Windows/MSYS2 and Linux.</p></article>
+    </section>
+
+    <section class="card" style="margin-top:16px"><h2>AST output</h2><pre class="tree">Program
+└── Block
+    ├── Declaration: i
+    │   └── Integer: 0
+    └── For Loop
+        ├── Condition
+        │   └── Binary Expression: &lt;
+        └── Body
+            └── Block</pre></section>
+
+    <section class="card" style="margin-top:16px"><h2>Quick start</h2><pre>git clone https://github.com/Phiraien/LoopStatementCompiler.git
+cd LoopStatementCompiler
+make
+python -m gui.app</pre><p>The hosted page is a project showcase and documentation site. The Tkinter desktop application and the C compiler run locally; they are not executed inside GitHub Pages.</p></section>
+
+    <footer>Loop Statement Compiler · Open-source educational project · <a href="https://github.com/Phiraien/LoopStatementCompiler" style="color:var(--accent)">GitHub repository</a></footer>
+  </main>
+</body>
+</html>
