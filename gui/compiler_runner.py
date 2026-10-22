@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import shlex
 import subprocess
 import tempfile
 import time
@@ -112,13 +113,17 @@ class CompilerRunner:
 
     def run_tests(self, timeout: float = 30.0) -> ProcessResult:
         script = self.project_root / "tests" / "run_tests.sh"
-        bash_candidates = [shutil.which("bash")]
         if os.name == "nt":
-            bash_candidates += [
+            # Prefer MSYS2 over WSL's bash. WSL bash cannot consume a native
+            # C:\\... path directly and produces the mangled path seen by users.
+            bash_candidates = [
                 os.environ.get("MSYS2_BASH"),
                 r"C:\msys64\usr\bin\bash.exe",
                 r"C:\msys64\usr\bin\sh.exe",
+                shutil.which("bash"),
             ]
+        else:
+            bash_candidates = [shutil.which("bash")]
         bash = next((item for item in bash_candidates if item and Path(item).exists()), None)
         if not bash:
             return ProcessResult(
@@ -127,10 +132,23 @@ class CompilerRunner:
                 stderr="Bash was not found. Run tests from MSYS2 UCRT64 or configure MSYS2_BASH.\n",
                 elapsed_ms=0,
             )
+
+        script_argument = str(script)
+        if os.name == "nt" and "msys" in bash.lower():
+            drive = script.drive[:1].lower()
+            script_argument = f"/{drive}{script.as_posix()[2:]}"
+
         started = time.perf_counter()
         try:
+            if os.name == "nt" and "msys" in bash.lower():
+                command = [
+                    bash, "-lc",
+                    "export PATH=/ucrt64/bin:/usr/bin:$PATH; bash " + shlex.quote(script_argument),
+                ]
+            else:
+                command = [bash, script_argument]
             completed = subprocess.run(
-                [bash, str(script)],
+                command,
                 cwd=self.project_root,
                 capture_output=True,
                 text=True,
