@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loop Statement Compiler</title>
+<style>
+body{margin:0;background:#0d1117;color:#e6edf3;font:16px system-ui,sans-serif;line-height:1.6}main{max-width:900px;margin:auto;padding:70px 24px}h1{font-size:clamp(40px,8vw,76px);line-height:1;margin:14px 0}.muted{color:#8b949e}.card{margin-top:18px;padding:24px;border:1px solid #30363d;border-radius:12px;background:#161b22}a{color:#58a6ff}pre{padding:18px;overflow:auto;border-radius:8px;background:#010409;color:#c9d1d9}
+</style></head>
+<body><main>
+<p class="muted">COMPILER DESIGN MINI PROJECT</p>
+<h1>Loop Statement Compiler</h1>
+<p class="muted">A beginner-friendly Python compiler front end for <code>for</code>, <code>while</code>, and <code>do-while</code> statements.</p>
+<p><a href="https://github.com/Phiraien/LoopStatementCompiler">View the source on GitHub</a></p>
+<div class="card"><h2>What it demonstrates</h2><p>Lexical analysis, recursive-descent parsing, dataclass AST construction, semantic checks, diagnostics, testing, and a Tkinter GUI.</p></div>
+<div class="card"><h2>Quick start</h2><pre>git clone https://github.com/Phiraien/LoopStatementCompiler.git
+cd LoopStatementCompiler
+python -m unittest discover -s tests -p "test_python_compiler.py" -v
+python gui.py</pre></div>
+<div class="card"><h2>Example AST concepts</h2><pre>Block
+├── Declaration: i
+└── ForLoop
+    ├── initialization
+    ├── condition
+    ├── update
+    └── body</pre><p class="muted">The hosted page is documentation. The Python compiler and Tkinter GUI run locally.</p></div>
+</main></body></html>
