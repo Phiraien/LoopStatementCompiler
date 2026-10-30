@@ -1,57 +1,35 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Loop Statement Compiler</title>
-  <style>
-    :root { color-scheme: dark; --bg:#0d1117; --panel:#161b22; --line:#30363d; --text:#e6edf3; --muted:#8b949e; --accent:#58a6ff; --green:#3fb950; }
-    * { box-sizing: border-box; }
-    body { margin:0; background:radial-gradient(circle at top right,#172b4d 0,#0d1117 44%); color:var(--text); font:16px/1.6 system-ui,Segoe UI,sans-serif; }
-    main { max-width:1050px; margin:auto; padding:72px 24px; }
-    .eyebrow { color:var(--green); font:600 13px ui-monospace,Consolas,monospace; letter-spacing:.14em; }
-    h1 { margin:14px 0; font-size:clamp(42px,8vw,78px); line-height:1; letter-spacing:-.06em; }
-    h2 { margin-top:0; }
-    .lead,.muted { color:var(--muted); }
-    .lead { max-width:720px; font-size:19px; }
-    .actions { display:flex; flex-wrap:wrap; gap:12px; margin:30px 0 55px; }
-    .button { border:1px solid var(--line); border-radius:8px; padding:10px 16px; color:var(--text); background:var(--panel); text-decoration:none; }
-    .primary { background:#1f6feb; border-color:#58a6ff; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(235px,1fr)); gap:16px; }
-    .card { padding:22px; border:1px solid var(--line); border-radius:12px; background:rgba(22,27,34,.85); }
-    code,pre { font-family:ui-monospace,Consolas,monospace; }
-    pre { overflow:auto; padding:18px; border-radius:9px; background:#010409; color:#c9d1d9; }
-    img { max-width:100%; border-radius:8px; border:1px solid var(--line); }
-    footer { margin-top:48px; color:var(--muted); font-size:14px; }
-  </style>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Loop Statement Compiler — Browser Edition</title>
+<style>
+:root{color-scheme:dark;--bg:#0d1117;--panel:#161b22;--panel2:#0b1017;--line:#30363d;--text:#e6edf3;--muted:#8b949e;--blue:#58a6ff;--green:#3fb950;--red:#f85149;--yellow:#d29922}*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#0d1117,#101b2d);color:var(--text);font:15px/1.5 system-ui,Segoe UI,sans-serif}main{max-width:1280px;margin:auto;padding:28px 18px 42px}header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;margin-bottom:20px}h1{margin:4px 0;font-size:clamp(28px,5vw,48px);letter-spacing:-.04em}h2{font-size:16px;margin:0 0 10px}.eyebrow{color:var(--green);font:700 12px ui-monospace,monospace;letter-spacing:.14em}.muted{color:var(--muted)}a{color:var(--blue)}button,select{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:7px;padding:9px 12px;cursor:pointer}button:hover{border-color:var(--blue)}.primary{background:#1f6feb;border-color:#58a6ff}.toolbar{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.layout{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:16px}.card{background:rgba(22,27,34,.92);border:1px solid var(--line);border-radius:10px;padding:14px}.editor{width:100%;min-height:420px;resize:vertical;background:#010409;color:#c9d1d9;border:1px solid var(--line);border-radius:7px;padding:14px;font:14px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:2}.status{display:inline-flex;align-items:center;gap:8px;padding:7px 10px;border-radius:7px;background:var(--panel);border:1px solid var(--line);font-weight:600}.status.ok{color:var(--green)}.status.bad{color:var(--red)}.output{min-height:170px;max-height:430px;overflow:auto;background:var(--panel2);border:1px solid var(--line);border-radius:7px;padding:12px;white-space:pre-wrap;word-break:break-word;font:13px/1.55 ui-monospace,monospace}.tabs{display:flex;gap:6px;margin-bottom:8px}.tab.active{border-color:var(--blue);color:var(--blue)}.hidden{display:none}.token{color:#c9d1d9}.token b{color:#d2a8ff}.ast{color:#79c0ff}.error{color:var(--red)}.success{color:var(--green)}.samples{display:flex;gap:8px;flex-wrap:wrap}.note{font-size:13px;color:var(--muted);margin-top:10px}@media(max-width:850px){.layout{grid-template-columns:1fr}header{display:block}.editor{min-height:320px}}
+</style>
 </head>
-<body>
-  <main>
-    <div class="eyebrow">COMPILER DESIGN MINI PROJECT</div>
-    <h1>Loop Statement Compiler</h1>
-    <p class="lead">A beginner-friendly Python compiler front end for <code>for</code>, <code>while</code>, and <code>do-while</code> statements, with lexical analysis, parsing, AST construction, semantic checks, tests, and a Tkinter GUI.</p>
-    <div class="actions">
-      <a class="button primary" href="https://github.com/Phiraien/LoopStatementCompiler">View source on GitHub</a>
-      <a class="button" href="https://github.com/Phiraien/LoopStatementCompiler/blob/main/README.md">Read the README</a>
-      <a class="button" href="https://github.com/Phiraien/LoopStatementCompiler/tree/main/screenshots">View screenshots</a>
-    </div>
-    <section class="grid">
-      <article class="card"><h2>Compiler pipeline</h2><p class="muted">Regex lexer → recursive-descent parser → dataclass AST → scoped semantic analyzer.</p></article>
-      <article class="card"><h2>Desktop GUI</h2><p class="muted">Tkinter editor with sample programs, token output, AST tree, semantic diagnostics, and compile status.</p></article>
-      <article class="card"><h2>Tested language</h2><p class="muted">Valid loops, nested loops, arithmetic expressions, syntax errors, undeclared variables, and duplicate declarations.</p></article>
-    </section>
-    <section class="card" style="margin-top:16px"><h2>Quick start</h2><pre>git clone https://github.com/Phiraien/LoopStatementCompiler.git
-cd LoopStatementCompiler
-python -m unittest discover -s tests -p "test_python_compiler.py" -v
-python gui.py</pre><p class="muted">The compiler and GUI run locally; GitHub Pages hosts this static project showcase.</p></section>
-    <section class="card" style="margin-top:16px"><h2>AST concept</h2><pre>Block
-├── Declaration: i
-└── ForLoop
-    ├── initialization
-    ├── condition
-    ├── update
-    └── body</pre></section>
-    <footer>Loop Statement Compiler · <a href="https://github.com/Phiraien/LoopStatementCompiler" style="color:var(--accent)">GitHub repository</a></footer>
-  </main>
-</body>
-</html>
+<body><main>
+<header><div><div class="eyebrow">COMPILER DESIGN MINI PROJECT</div><h1>Loop Statement Compiler</h1><div class="muted">Browser edition — runs entirely in this HTML page. The original Python files remain unchanged in the repository.</div></div><div class="status" id="status">● Ready</div></header>
+<div class="toolbar"><select id="sample"><option value="for">Valid for loop</option><option value="while">Valid while loop</option><option value="do">Valid do-while loop</option><option value="nested">Nested loops</option><option value="syntax">Syntax error</option><option value="semantic">Semantic error</option><option value="duplicate">Duplicate declaration</option></select><button class="primary" id="compile">Compile</button><button id="clear">Clear</button><a href="https://github.com/Phiraien/LoopStatementCompiler" target="_blank"><button type="button">GitHub</button></a></div>
+<div class="layout"><section class="card"><h2>Source editor</h2><textarea id="source" class="editor" spellcheck="false"></textarea><div class="note">Supported subset: integer declarations, assignments, arithmetic/comparison expressions, blocks, and for/while/do-while loops.</div></section><section class="card"><div class="tabs"><button class="tab active" data-tab="result">Result</button><button class="tab" data-tab="tokens">Tokens</button><button class="tab" data-tab="ast">AST</button></div><pre id="result" class="output"></pre><pre id="tokens" class="output hidden"></pre><pre id="ast" class="output hidden"></pre></section></div>
+<footer class="note">Local desktop GUI: <code>py -3 gui.py</code> · Python tests: <code>py -3 -m unittest discover -s tests -p "test_python_compiler.py" -v</code></footer>
+</main>
+<script>
+const samples={
+for:`for (int i = 0; i < 10; i++) {\n  i++;\n}`,
+while:`int i = 0;\nwhile (i < 10) {\n  i++;\n}`,
+do:`int i = 0;\ndo {\n  i++;\n} while (i < 10);`,
+nested:`for (int i = 0; i < 5; i++) {\n  for (int j = 0; j < 3; j++) {\n    j++;\n  }\n}`,
+syntax:`for (int i = 0 i < 10; i++) {\n  i++;\n}`,
+semantic:`while (x < 10) {\n  x++;\n}`,
+duplicate:`int i = 0;\nint i = 5;`};
+const spec=[['COMMENT',/\/\/[^\n]*|\/\*[\s\S]*?\*\//y],['FOR',/\bfor\b/y],['WHILE',/\bwhile\b/y],['DO',/\bdo\b/y],['INT',/\bint\b/y],['NUMBER',/\d+/y],['ID',/[a-zA-Z_][a-zA-Z0-9_]*/y],['INC',/\+\+/y],['DEC',/--/y],['EQ',/==/y],['NE',/!=/y],['LE',/<=/y],['GE',/>=/y],['ASSIGN',/=/y],['LT',/</y],['GT',/>/y],['PLUS',/\+/y],['MINUS',/-/y],['MUL',/\*/y],['DIV',/\//y],['LPAREN',/\(/y],['RPAREN',/\)/y],['LBRACE',/\{/y],['RBRACE',/\}/y],['SEMICOLON',/;/y],['SKIP',/[ \t\r\n]+/y]];
+function tokenize(code){let out=[],p=0;while(p<code.length){let found=false;for(const [type,re] of spec){re.lastIndex=p;const m=re.exec(code);if(m){found=true;p=re.lastIndex;if(type!=='SKIP'&&type!=='COMMENT')out.push({type,value:m[0]});break}}if(!found)throw Error('Invalid character: '+code[p])}out.push({type:'EOF',value:''});return out}
+class Parser{constructor(t){this.t=t;this.p=0}cur(){return this.t[this.p]} match(type){if(this.cur().type===type)return this.t[this.p++].value;throw Error(`Expected ${type}, but found '${this.cur().value}'`)} parse(){let s=[];while(this.cur().type!=='EOF')s.push(this.statement());return {kind:'Block',statements:s}} statement(){let k=this.cur().type;if(k==='FOR')return this.forLoop();if(k==='WHILE')return this.whileLoop();if(k==='DO')return this.doLoop();if(k==='INT'){let n=this.declaration();this.match('SEMICOLON');return n}if(k==='ID'){let n=this.assign();this.match('SEMICOLON');return n}if(k==='LBRACE')return this.block();throw Error(`Unexpected token: '${this.cur().value}'`)} block(){this.match('LBRACE');let s=[];while(!['RBRACE','EOF'].includes(this.cur().type))s.push(this.statement());this.match('RBRACE');return {kind:'Block',statements:s}} declaration(){this.match('INT');let name=this.match('ID'),value=null;if(this.cur().type==='ASSIGN'){this.match('ASSIGN');value=this.expr()}return {kind:'Declaration',name,value}} assign(){let name=this.match('ID');if(['INC','DEC'].includes(this.cur().type))return {kind:'Update',name,operator:this.t().value};this.match('ASSIGN');return {kind:'Assignment',name,value:this.expr()}} t(){let v=this.cur().value;this.p++;return {value:v}} forLoop(){this.match('FOR');this.match('LPAREN');let initialization=this.cur().type==='INT'?this.declaration():this.assign();this.match('SEMICOLON');let condition=this.condition();this.match('SEMICOLON');let update=this.assign();this.match('RPAREN');return {kind:'ForLoop',initialization,condition,update,body:this.block()}} whileLoop(){this.match('WHILE');this.match('LPAREN');let condition=this.condition();this.match('RPAREN');return {kind:'WhileLoop',condition,body:this.block()}} doLoop(){this.match('DO');let body=this.block();this.match('WHILE');this.match('LPAREN');let condition=this.condition();this.match('RPAREN');this.match('SEMICOLON');return {kind:'DoWhileLoop',body,condition}} condition(){let left=this.expr(),ops=['LT','GT','LE','GE','EQ','NE'];if(!ops.includes(this.cur().type))throw Error('Expected comparison operator in condition');let operator=this.cur().value;this.p++;return {kind:'BinaryOp',left,operator,right:this.expr()}} expr(){let n=this.term();while(['PLUS','MINUS'].includes(this.cur().type)){let operator=this.cur().value;this.p++;n={kind:'BinaryOp',left:n,operator,right:this.term()}}return n} term(){let n=this.factor();while(['MUL','DIV'].includes(this.cur().type)){let operator=this.cur().value;this.p++;n={kind:'BinaryOp',left:n,operator,right:this.factor()}}return n} factor(){let x=this.cur();if(x.type==='NUMBER'){this.p++;return {kind:'Number',value:Number(x.value)}}if(x.type==='ID'){this.p++;return {kind:'Variable',name:x.value}}if(x.type==='LPAREN'){this.match('LPAREN');let n=this.expr();this.match('RPAREN');return n}throw Error(`Invalid expression near '${x.value}'`)}}
+function analyze(node,scopes=[{}]){const declare=(n,init)=>{let s=scopes.at(-1);if(n in s)throw Error(`Variable '${n}' already declared`);s[n]=init};const find=n=>{for(let i=scopes.length-1;i>=0;i--)if(n in scopes[i])return scopes[i];throw Error(`Variable '${n}' is not declared`)};const expr=n=>{if(!n)return;if(n.kind==='Variable'){let s=find(n.name);if(!s[n.name])throw Error(`Variable '${n.name}' used before initialization`)}if(n.kind==='BinaryOp'){expr(n.left);expr(n.right)}};const walk=n=>{if(n.kind==='Block'){scopes.push({});try{n.statements.forEach(walk)}finally{scopes.pop()}}else if(n.kind==='Declaration'){expr(n.value);declare(n.name,!!n.value)}else if(n.kind==='Assignment'){let s=find(n.name);expr(n.value);s[n.name]=true}else if(n.kind==='Update'){let s=find(n.name);if(!s[n.name])throw Error(`Variable '${n.name}' used before initialization`)}else if(n.kind==='ForLoop'){scopes.push({});try{walk(n.initialization);expr(n.condition);walk(n.update);walk(n.body)}finally{scopes.pop()}}else if(n.kind==='WhileLoop'){expr(n.condition);walk(n.body)}else if(n.kind==='DoWhileLoop'){walk(n.body);expr(n.condition)}};walk(node)}
+function label(n){if(!n)return '—';if(n.kind==='Block')return 'Block';if(n.kind==='Declaration')return `Declaration: ${n.name}`;if(n.kind==='Assignment')return `Assignment: ${n.name}`;if(n.kind==='Update')return `Update: ${n.name} ${n.operator}`;if(n.kind==='Number')return `Integer: ${n.value}`;if(n.kind==='Variable')return `Identifier: ${n.name}`;if(n.kind==='BinaryOp')return `Binary Expression: ${n.operator}`;return n.kind.replace('Loop',' Loop')}
+function children(n){if(!n)return[];if(n.kind==='Block')return n.statements.map(x=>['',x]);if(n.kind==='Declaration'||n.kind==='Assignment')return n.value?[['Value',n.value]]:[];if(n.kind==='BinaryOp')return [['Left',n.left],['Right',n.right]];if(n.kind==='ForLoop')return [['Initialization',n.initialization],['Condition',n.condition],['Update',n.update],['Body',n.body]];if(n.kind==='WhileLoop')return [['Condition',n.condition],['Body',n.body]];if(n.kind==='DoWhileLoop')return [['Body',n.body],['Condition',n.condition]];return[]}
+function tree(n,prefix='',last=true,root=true){let s=(root?label(n):prefix+(last?'└── ':'├── ')+label(n))+'\n';let c=children(n);c.forEach(([name,x],i)=>{let l=i===c.length-1,p=prefix+(root?'':(last?'    ':'│   '));if(name){s+=p+(l?'└── ':'├── ')+name+'\n';s+=tree(x,p+(l?'    ':'│   '),l,false)}else{s+=tree(x,p,l,false)}});return s}
+function compile(code){let tokens=tokenize(code),ast=new Parser(tokens).parse();analyze(ast);return {tokens,ast}}
+const source=document.querySelector('#source'),status=document.querySelector('#status'),result=document.querySelector('#result'),tokensOut=document.querySelector('#tokens'),astOut=document.querySelector('#ast');function render(){try{let r=compile(source.value);status.className='status ok';status.textContent='● Compilation Successful';result.className='output success';result.textContent='Compilation Successful! No lexical, syntax or semantic errors.';tokensOut.textContent=r.tokens.map(x=>`${x.type.padEnd(12)} ${x.value}`).join('\n');astOut.textContent=tree(r.ast)}catch(e){status.className='status bad';status.textContent='● Compilation Failed';result.className='output error';result.textContent=e.message;tokensOut.textContent='';astOut.textContent='AST unavailable because compilation failed.'}}
+document.querySelector('#sample').onchange=e=>source.value=samples[e.target.value];document.querySelector('#compile').onclick=render;document.querySelector('#clear').onclick=()=>{source.value='';result.textContent='';tokensOut.textContent='';astOut.textContent='';status.className='status';status.textContent='● Ready'};document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));b.classList.add('active');['result','tokens','ast'].forEach(id=>document.getElementById(id).classList.toggle('hidden',id!==b.dataset.tab))});source.value=samples.for;
+</script></body></html>
